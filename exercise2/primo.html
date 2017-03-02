@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to WebGL</title>
+
+    <link rel="stylesheet" href="css/main.css" />
+    <script src="js/three.js"></script>
+    <script>
+        var renderer = null,
+            scene = null,
+            camera = null,
+            cube = null,
+            animating = false;
+        function onLoad()
+        {
+
+            var container = document.getElementById("container");
+
+            renderer = new THREE.WebGLRenderer( { antialias: true } );
+            renderer.setSize(container.offsetWidth, container.offsetHeight);
+            container.appendChild( renderer.domElement );
+
+            scene = new THREE.Scene();
+
+            camera = new THREE.PerspectiveCamera( 45, container.offsetWidth / 
+
+container.offsetHeight, 1, 4000 );
+            camera.position.set( 0, 0, 3 );
+
+            var light = new THREE.DirectionalLight( 0xffffff, 1.5);
+            light.position.set(0, 0, 1);
+            scene.add( light );
+
+            var material = new THREE.MeshNormalMaterial();
+            var geometry = new THREE.CubeGeometry(1, 1, 1);
+            cube = new THREE.Mesh(geometry, material);
+            cube.rotation.x = Math.PI / 5;
+            cube.rotation.y = Math.PI / 5;
+            scene.add( cube );
+
+            addMouseHandler();
+            run();
+        }
+        function run()        {
+
+            renderer.render( scene, camera );
+
+            if (animating)            {
+                cube.rotation.y -= 0.01;
+            }
+
+            requestAnimationFrame(run);
+        }
+        function addMouseHandler(){
+            var dom = renderer.domElement;
+            dom.addEventListener( 'mouseup', onMouseUp, false);
+        }
+        function onMouseUp  (event){
+            event.preventDefault();
+            animating = !animating;
+        }
+    </script>
+
+</head>
+<body onLoad="onLoad();" style="">
+<h1>Welcome to WebGL!</h1>
+<div id="container" style="width:95%; height:80%; position:absolute;"></div>
+<div id="prompt" style="width:95%; height:6%; bottom:0; text-align:center; 
+
+position:absolute;">Click to animate the cube</div>
+</body>
+</html>
