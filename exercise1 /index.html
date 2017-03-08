@@ -1,70 +1,53 @@
+//1. Try changing the material color
+//2. Try adding another cube
+//3. Try to modify the position of the camera
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Welcome to WebGL</title>
-
-    <link rel="stylesheet" href="css/main.css" />
+    <meta charset="utf-8">
+    <title>hello webgl</title>
     <script src="js/three.js"></script>
-    <script>
-        var renderer = null,
-            scene = null,
-            camera = null,
-            cube = null,
-            animating = false;
-        function onLoad()
-        {
-
-            var container = document.getElementById("container");
-            renderer = new THREE.WebGLRenderer( { antialias: true } );
-            renderer.setSize(container.offsetWidth, container.offsetHeight);
-            container.appendChild( renderer.domElement );
-
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera( 45, container.offsetWidth / container.offsetHeight, 1, 4000 );
-            camera.position.set( 0, 0, 3 );
-
-            var light = new THREE.DirectionalLight( 0xffffff, 1.5);
-            light.position.set(0, 0, 1);
-            scene.add( light );
-            
-            
-            var mapUrl = "imgs/5.jpg";  
-            var map = THREE.ImageUtils.loadTexture(mapUrl); 
-            var material = new THREE.MeshPhongMaterial({ map: map });  
-            var geometry = new THREE.CubeGeometry(1, 1, 1);
-            cube = new THREE.Mesh(geometry, material);
-            cube.rotation.x = Math.PI / 5;
-            cube.rotation.y = Math.PI / 5;
-            scene.add( cube );
-
-            addMouseHandler();
-            run();
-        }
-        function run()        {
-
-            renderer.render( scene, camera );
-
-            if (animating)            {
-                cube.rotation.y -= 0.01;
-            }
-
-            requestAnimationFrame(run);
-        }
-        function addMouseHandler(){
-            var dom = renderer.domElement;
-            dom.addEventListener( 'mouseup', onMouseUp, false);
-        }
-        function onMouseUp  (event){
-            event.preventDefault();
-            animating = !animating;
-        }
-    </script>
-
 </head>
-<body onLoad="onLoad();" style="">
-<h1>Welcome to WebGL!</h1>
-<div id="container" style="width:95%; height:80%; position:absolute;"></div>
-<div id="prompt" style="width:95%; height:6%; bottom:0; text-align:center; position:absolute;">Click to animate the cube</div>
+<body>
+<script type="text/javascript">
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor( 0xffff00 );
+    document.body.appendChild(renderer.domElement);
+
+    var material = new THREE.MeshBasicMaterial({color:0xff0000, side:THREE.FrontSide, vertexColors: THREE.FaceColors});
+    var geometry = new THREE.CubeGeometry(1, 1, 1);
+    cube = new THREE.Mesh(geometry, material);
+    cube.rotation.x = Math.PI / 5;
+    cube.rotation.y = Math.PI / 5;
+    scene.add( cube );
+    var radius = 0.5, segemnt = 18, rings = 18;
+
+    var sphereMaterial = new THREE.MeshLambertMaterial({ color: 0xff0000 });
+
+    var mesh2 = new THREE.Mesh(
+        new THREE.SphereGeometry(radius,segemnt,rings),
+        sphereMaterial
+    );
+
+    mesh2.geometry.verticesNeedUpdate = true;
+    mesh2.geometry.normalsNeedUpdate = true;
+    mesh2.position.x =2;
+    mesh2.position.y = 0;
+    mesh2.position.z=1;
+    mesh2.rotation.x = Math.PI / 5;
+    mesh2.rotation.y = Math.PI / 5;
+    scene.add(mesh2);
+
+    camera.position.z = 5;
+    function render() {
+        requestAnimationFrame(render);
+        renderer.render(scene, camera);
+    }
+    render();
+</script>
 </body>
 </html>
-
