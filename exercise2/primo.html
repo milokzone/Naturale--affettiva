@@ -1,72 +1,68 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Welcome to WebGL</title>
-
-    <link rel="stylesheet" href="css/main.css" />
+    <meta charset="utf-8">
+    <title>cube with six faces</title>
     <script src="js/three.js"></script>
-    <script>
-        var renderer = null,
-            scene = null,
-            camera = null,
-            cube = null,
-            animating = false;
-        function onLoad()
-        {
-
-            var container = document.getElementById("container");
-
-            renderer = new THREE.WebGLRenderer( { antialias: true } );
-            renderer.setSize(container.offsetWidth, container.offsetHeight);
-            container.appendChild( renderer.domElement );
-
-            scene = new THREE.Scene();
-
-            camera = new THREE.PerspectiveCamera( 45, container.offsetWidth / 
-
-container.offsetHeight, 1, 4000 );
-            camera.position.set( 0, 0, 3 );
-
-            var light = new THREE.DirectionalLight( 0xffffff, 1.5);
-            light.position.set(0, 0, 1);
-            scene.add( light );
-
-            var material = new THREE.MeshNormalMaterial();
-            var geometry = new THREE.CubeGeometry(1, 1, 1);
-            cube = new THREE.Mesh(geometry, material);
-            cube.rotation.x = Math.PI / 5;
-            cube.rotation.y = Math.PI / 5;
-            scene.add( cube );
-
-            addMouseHandler();
-            run();
-        }
-        function run()        {
-
-            renderer.render( scene, camera );
-
-            if (animating)            {
-                cube.rotation.y -= 0.01;
-            }
-
-            requestAnimationFrame(run);
-        }
-        function addMouseHandler(){
-            var dom = renderer.domElement;
-            dom.addEventListener( 'mouseup', onMouseUp, false);
-        }
-        function onMouseUp  (event){
-            event.preventDefault();
-            animating = !animating;
-        }
-    </script>
-
 </head>
-<body onLoad="onLoad();" style="">
-<h1>Welcome to WebGL!</h1>
-<div id="container" style="width:95%; height:80%; position:absolute;"></div>
-<div id="prompt" style="width:95%; height:6%; bottom:0; text-align:center; 
+<body>
+<script type="text/javascript">
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor( 0xffffff );
+    document.body.appendChild(renderer.domElement);
+    var material, geometry, cube;
+    material = new THREE.MeshBasicMaterial({side:THREE.FrontSide, vertexColors: THREE.FaceColors});
+    geometry = new THREE.Geometry();
 
-position:absolute;">Click to animate the cube</div>
+    geometry.vertices.push( new THREE.Vector3( -1, -1, -1));
+    geometry.vertices.push( new THREE.Vector3( -1, 1, -1 ));
+    geometry.vertices.push( new THREE.Vector3( 1, 1, -1 ));
+    geometry.vertices.push( new THREE.Vector3( 1, -1, -1 ));
+    geometry.vertices.push( new THREE.Vector3( -1, -1, 1 ));
+    geometry.vertices.push( new THREE.Vector3( -1, 1, 1 ));
+    geometry.vertices.push( new THREE.Vector3( 1, 1, 1 ));
+    geometry.vertices.push( new THREE.Vector3( 1, -1, 1 ));
+
+    geometry.faces.push( new THREE.Face3( 3, 0, 1));
+    geometry.faces.push( new THREE.Face3( 1, 2, 3));
+    geometry.faces.push( new THREE.Face3( 0, 4, 5));
+    geometry.faces.push( new THREE.Face3( 5, 1, 0));
+    geometry.faces.push( new THREE.Face3( 5, 4, 7));
+    geometry.faces.push( new THREE.Face3( 7, 6, 5));
+    geometry.faces.push( new THREE.Face3( 6, 7, 3));
+    geometry.faces.push( new THREE.Face3( 3, 2, 6));
+    geometry.faces.push( new THREE.Face3( 2, 1, 5));
+    geometry.faces.push( new THREE.Face3( 5, 6, 2));
+    geometry.faces.push( new THREE.Face3( 4, 0, 3));
+    geometry.faces.push( new THREE.Face3( 3, 7, 4));
+
+
+    geometry.faces[0].color.set('black');
+    geometry.faces[1].color.set('black');
+    geometry.faces[2].color.set('red');
+    geometry.faces[3].color.set('red');
+    geometry.faces[4].color.set('blue');
+    geometry.faces[5].color.set('blue');
+    geometry.faces[6].color.set('yellow');
+    geometry.faces[7].color.set('yellow');
+    geometry.faces[8].color.set('green');
+    geometry.faces[9].color.set('green');
+    geometry.faces[10].color.set('violet');
+    geometry.faces[11].color.set('violet');
+    cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
+    camera.position.z = 5;
+    function render() {
+        requestAnimationFrame(render);
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+        cube.rotation.z += 0.01;
+        renderer.render(scene, camera);
+    }
+    render();
+</script>
 </body>
 </html>
